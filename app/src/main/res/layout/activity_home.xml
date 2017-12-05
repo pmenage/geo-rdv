@@ -18,13 +18,13 @@
 
 
     <TextView
-        android:id="@+id/num"
+        android:id="@+id/enterNum"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="enter the phone number" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/num"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -32,14 +32,14 @@
         android:text="" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/invite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="INVITE FOR AN APPOINTMENT"
         />
 
     <Button
-        android:id="@+id/button"
+
         android:layout_width="224dp"
         android:layout_height="wrap_content"
         android:onClick="getList"
