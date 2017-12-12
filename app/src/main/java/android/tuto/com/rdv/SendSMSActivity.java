@@ -28,10 +28,10 @@ public class SendSMSActivity extends AppCompatActivity {
 
     /* Article Medium */
     private void requestReadAndSendSmsPermission() {
-        /*if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_SMS)) {
-
-        }*/
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, SMS_PERMISSION_CODE);
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS)) {
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, SMS_PERMISSION_CODE);
+        }
     }
 
     @Override
@@ -39,6 +39,7 @@ public class SendSMSActivity extends AppCompatActivity {
         switch (requestCode) {
             case SMS_PERMISSION_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
                     Toast.makeText(SendSMSActivity.this, "Permission accepted", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(SendSMSActivity.this, "Permission denied", Toast.LENGTH_LONG).show();
