@@ -1,6 +1,7 @@
 package android.tuto.com.rdv;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -29,6 +30,9 @@ public class SendSMS extends AppCompatActivity {
         } else {
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.SEND_SMS}, SEND_SMS_PERMISSION_REQUEST_CODE);
         }
+        if (!checkPermission(Manifest.permission.RECEIVE_SMS)) {
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.RECEIVE_SMS}, 222);
+        }
 
         smsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,7 +42,7 @@ public class SendSMS extends AppCompatActivity {
 
                 if (checkPermission(Manifest.permission.SEND_SMS)) {
                     SmsManager smsManager = SmsManager.getDefault();
-                    smsManager.sendTextMessage(phoneNumber, null, "Helo", null, null);
+                    smsManager.sendTextMessage(phoneNumber, null, "Hello", null, null);
                 } else {
                     Toast.makeText(SendSMS.this, "Permission denied", Toast.LENGTH_SHORT).show();
                 }
@@ -62,6 +66,12 @@ public class SendSMS extends AppCompatActivity {
                 return;
             }
         }
+    }
+
+    public void getList(View v){
+
+        Intent intent = new Intent(this,MyListActivity.class);
+        startActivity(intent);
     }
 
 }
