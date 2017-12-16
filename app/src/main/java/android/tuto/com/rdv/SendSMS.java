@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,12 +38,14 @@ public class SendSMS extends AppCompatActivity {
         smsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView phoneNumberView = (TextView) findViewById(R.id.enterNum);
-                String phoneNumber = phoneNumberView.toString();
+                EditText phoneNumberView = (EditText) findViewById(R.id.num);
+                String phoneNumber = phoneNumberView.getText().toString();
 
                 if (checkPermission(Manifest.permission.SEND_SMS)) {
                     SmsManager smsManager = SmsManager.getDefault();
                     smsManager.sendTextMessage(phoneNumber, null, "Hello", null, null);
+                    phoneNumberView.setText("");
+                    Toast.makeText(SendSMS.this, "SMS sent to " + phoneNumber, Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(SendSMS.this, "Permission denied", Toast.LENGTH_SHORT).show();
                 }
