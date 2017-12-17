@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">RDV</string>
+    <string name="new_appointment">New appointment</string>
+    <string name="invite">Invite for an appointment</string>
+    <string name="contacts">Invite a contact</string>
+    <string name="enter_number">Enter the phone number:</string>
 </resources>
