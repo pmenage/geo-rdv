@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">RDV</string>
+    <string name="google_maps_api_key">AIzaSyDS3QQn_QeEb-hLNerGPk6qXfos67ZSjY8</string>
     <string name="new_appointment">New appointment</string>
     <string name="invite">Invite for an appointment</string>
     <string name="contacts">Invite a contact</string>
     <string name="enter_number">Enter the phone number:</string>
+    <string name="seeMap">See coordinates on map</string>
 </resources>

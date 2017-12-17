@@ -22,12 +22,14 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 public class SendSMS extends AppCompatActivity {
 
     final int SEND_SMS_PERMISSION_REQUEST_CODE = 111;
     private Button smsButton;
+    private GoogleMap googleMap;
     private FusedLocationProviderClient fusedLocationClient;
     private static Double Latitude = 0.0, Longitude = 0.0;
 
@@ -132,6 +134,15 @@ public class SendSMS extends AppCompatActivity {
 
         Intent intent = new Intent(this, MyListActivity.class);
         startActivity(intent);
+    }
+
+    public void seeMap(View view) {
+
+        Intent intent = new Intent(this, MyGoogleMap.class);
+        intent.putExtra("latitude", 70.32);
+        intent.putExtra("longitude", 43.76);
+        startActivity(intent);
+
     }
 
 }
