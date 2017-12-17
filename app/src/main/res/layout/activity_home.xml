@@ -7,21 +7,18 @@
     android:orientation="vertical"
     tools:context="android.tuto.com.rdv.SendSMS">
 
-    <Button
+    <TextView
         android:gravity="center"
-        android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="NEW APPOINTMENT"
-
-        />
+        android:text="@string/new_appointment" />
 
 
     <TextView
         android:id="@+id/enterNum"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="enter the phone number" />
+        android:text="@string/enter_number" />
 
     <EditText
         android:id="@+id/num"
@@ -35,15 +32,21 @@
         android:id="@+id/invite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="INVITE FOR AN APPOINTMENT"
+        android:text="@string/invite"
+        android:onClick="sendSMS"
         />
 
     <Button
-
         android:layout_width="224dp"
         android:layout_height="wrap_content"
         android:onClick="getList"
-        android:text="GET MY LIST CONTACTS" />
+        android:text="@string/contacts" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="seeMap"
+        android:text="@string/seeMap" />
 
 
 </LinearLayout>
