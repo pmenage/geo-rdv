@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -14,24 +13,15 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.tasks.OnSuccessListener;
-
-public class SendSMS extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     final int SEND_SMS_PERMISSION_REQUEST_CODE = 111;
+    final int RECEIVE_SMS_PERMISSION_REQUEST_CODE = 222;
     private Button smsButton;
-    private GoogleMap googleMap;
-    private FusedLocationProviderClient fusedLocationClient;
-    private static Double Latitude = 0.0, Longitude = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,45 +37,23 @@ public class SendSMS extends AppCompatActivity {
         }
 
         if (!checkPermission(Manifest.permission.RECEIVE_SMS)) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS}, 222);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS}, RECEIVE_SMS_PERMISSION_REQUEST_CODE);
         }
-
-        /*
-        if (!checkPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 333);
-        }
-        */
 
         if (!isLocationEnabled()) {
             showLocationNotEnabledAlert();
         }
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
     }
 
     public void sendSMS(View view) {
         EditText phoneNumberView = (EditText) findViewById(R.id.num);
         String phoneNumber = phoneNumberView.getText().toString();
+        phoneNumberView.setText("");
 
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        if (location != null) {
-                            Latitude = location.getLatitude();
-                            Longitude = location.getLongitude();
-                        }
-                    }
-                });
-
-        if (checkPermission(Manifest.permission.SEND_SMS)) {
-            SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(phoneNumber, null, "Latitude: " + Latitude + "; Longitude: " + Longitude, null, null);
-            phoneNumberView.setText("");
-            Toast.makeText(SendSMS.this, "SMS sent to " + phoneNumber, Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(SendSMS.this, "Permission denied", Toast.LENGTH_SHORT).show();
-        }
+        Intent intent = new Intent(this, ChooseLocationActivity.class);
+        intent.putExtra("phoneNumber", phoneNumber);
+        startActivity(intent);
 
     }
 
@@ -138,7 +106,7 @@ public class SendSMS extends AppCompatActivity {
 
     public void seeMap(View view) {
 
-        Intent intent = new Intent(this, MyGoogleMap.class);
+        Intent intent = new Intent(this, GoogleMapActivity.class);
         intent.putExtra("latitude", 70.32);
         intent.putExtra("longitude", 43.76);
         startActivity(intent);
