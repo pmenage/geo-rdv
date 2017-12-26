@@ -6,48 +6,52 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:orientation="vertical"
-    tools:context="android.tuto.com.rdv.MainActivity">
+    tools:context="android.tuto.com.rdv.ChooseLocationActivity">
 
     <TextView
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/new_appointment" />
+        android:text="Send your location or choose a location"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send my location"
+        android:onClick="sendUserLocation" />
 
     <TextView
-        android:id="@+id/enterNum"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/enter_number" />
+        android:text="Latitude:"/>
 
     <EditText
-        android:id="@+id/num"
+        android:id="@+id/latitude"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
+        android:text="" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Longitude:"/>
+
+    <EditText
+        android:id="@+id/longitude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="" />
 
     <Button
-        android:id="@+id/invite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/invite"
-        android:onClick="sendSMS"
-        />
-
-    <Button
-        android:layout_width="224dp"
-        android:layout_height="wrap_content"
-        android:onClick="getList"
-        android:text="@string/contacts" />
+        android:text="Send another location"
+        android:onClick="sendOtherLocation" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="seeMap"
-        android:text="@string/seeMap" />
-
+        android:text="Cancel"
+        android:onClick="cancel" />
 
 </LinearLayout>
