@@ -41,7 +41,7 @@
         <activity android:name=".AddContactActivity" />
         <activity android:name=".GoogleMapActivity" />
         <activity android:name=".ChooseLocationActivity" />
-        <activity android:name=".SendSMSActivity"></activity>
+        <activity android:name=".SendSMSActivity" />
 
         <receiver android:name=".SMSReceiver">
             <intent-filter>
@@ -49,6 +49,8 @@
             </intent-filter>
         </receiver>
 
+        <activity android:name=".SMSReceivedActivity" />
+        <activity android:name=".NotificationsActivity"></activity>
     </application>
 
 </manifest>

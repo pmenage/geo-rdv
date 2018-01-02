@@ -44,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
             showLocationNotEnabledAlert();
         }
 
+        DatabaseHandler db = new DatabaseHandler(this);
+        db.addUser(new User("Pauline", "9648395739"));
+        db.addUser(new User("Khadija", "8394759835"));
+
     }
 
     public void sendSMS(View view) {
@@ -109,6 +113,13 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, GoogleMapActivity.class);
         intent.putExtra("latitude", 70.32);
         intent.putExtra("longitude", 43.76);
+        startActivity(intent);
+
+    }
+
+    public void seeNotifications(View view) {
+
+        Intent intent = new Intent(this, NotificationsActivity.class);
         startActivity(intent);
 
     }

@@ -19,6 +19,9 @@ public class SMSReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
+
+            // PDU : "protocol data unit" -> This is the industrial standard for SMS message.
+            // All the SMS data will be bundled in a PDU
             Object[] pdus = (Object[]) bundle.get("pdus");
             String format = bundle.getString("format");
 
@@ -38,12 +41,10 @@ public class SMSReceiver extends BroadcastReceiver {
                 // TODO : Prevent message from appearing in SMS ?
                 // TODO : Get contact from phone number if contact ?
 
-                if (isIncomingMeeting()) {
-                    startIncomingMeetingDialog();
-                }
-
-                if (isResponseToMeeting()) {
-                    startResponseToMeetingDialog();
+                if (isResponseToMeeting(messages[0].getMessageBody())) {
+                    startResponseToMeetingDialog(senderPhoneNo, messages[0].getMessageBody());
+                } else {
+                    startIncomingMeetingDialog(context, senderPhoneNo, messages[0].getMessageBody());
                 }
 
             }
@@ -52,22 +53,33 @@ public class SMSReceiver extends BroadcastReceiver {
 
     private boolean isIncomingMeeting() {
         // TODO : find a way to filter messages
+        // IDEA : pour chaque demande de rdv, mettre dans la base un booléen disant si c'est la réception
+        // d'une réponse ou pas
         return true;
     }
 
-    private void startIncomingMeetingDialog() {
-        PopupWindow popupWindow = new PopupWindow();
+    private void startIncomingMeetingDialog(Context context, String phoneNumber, String message) {
+        Intent intent = new Intent(context, SMSReceivedActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("phoneNumber", phoneNumber);
+        intent.putExtra("message", message);
+        context.startActivity(intent);
     }
 
-    private boolean isResponseToMeeting() {
-        // TODO : find a way to filter messages
-        return false;
+    private boolean isResponseToMeeting(String message) {
+        return message.contains("Response:");
     }
 
-    private void startResponseToMeetingDialog() {
-        // TODO : Show response in a popup
-        // Daniel accepted your meeting
-        // Daniel declined your meeting
+    private void startResponseToMeetingDialog(String phoneNumber, String message) {
+        NotificationsActivity instance = NotificationsActivity.instance();
+        // Pas grave si ça plante car on va changer et mettre dans la base de données
+        if (message.contains("Accepted")) {
+            // Todo : replace phone number by name of person (with database)
+            instance.updateList(phoneNumber + " accepted your invitation");
+        } else {
+            // Todo : replace phone number by name of person (with database)
+            instance.updateList(phoneNumber + " declinde your invitation");
+        }
     }
 
 }

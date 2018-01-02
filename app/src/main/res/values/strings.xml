@@ -7,4 +7,6 @@
     <string name="enter_number">Enter the phone number:</string>
     <string name="seeMap">See coordinates on map</string>
     <string name="title_activity_choose_location">ChooseLocationActivity</string>
+    <string name="seeNotifications">See notifications</string>
+    <string name="notifications">Notifications</string>
 </resources>
