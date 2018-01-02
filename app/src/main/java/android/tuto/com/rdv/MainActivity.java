@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     final int SEND_SMS_PERMISSION_REQUEST_CODE = 111;
     final int RECEIVE_SMS_PERMISSION_REQUEST_CODE = 222;
+    final int READ_PHONE_STATE_PERMISSION_REQUEST_CODE = 333;
     private Button smsButton;
 
     @Override
@@ -40,13 +41,17 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS}, RECEIVE_SMS_PERMISSION_REQUEST_CODE);
         }
 
+        if (!checkPermission(Manifest.permission.READ_PHONE_STATE)) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, READ_PHONE_STATE_PERMISSION_REQUEST_CODE);
+        }
+
         if (!isLocationEnabled()) {
             showLocationNotEnabledAlert();
         }
 
         DatabaseHandler db = new DatabaseHandler(this);
-        db.addUser(new User("Pauline", "9648395739"));
-        db.addUser(new User("Khadija", "8394759835"));
+        db.addUser(new User("Pauline", "15555215554"));
+        db.addUser(new User("Khadija", "15555215556"));
 
     }
 

@@ -1,7 +1,11 @@
 package android.tuto.com.rdv;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -29,13 +33,24 @@ public class NotificationsActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
 
         DatabaseHandler db = new DatabaseHandler(this);
-        List<User> users = db.getAllUsers();
 
-        for (User user : users) {
-            adapter.insert(user.getName(), 0);
+        TelephonyManager tMgr = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        String mPhoneNumber = tMgr.getLine1Number();
+
+        List<Notification> notifications = db.getAllNotificationsByPhoneNumber(mPhoneNumber);
+
+        if (notifications != null) {
+            for (Notification notification : notifications) {
+                adapter.insert(notification.getTimestamp() + ": " + notification.getMessage(), 0);
+            }
+            adapter.notifyDataSetChanged();
         }
-        adapter.notifyDataSetChanged();
 
+    }
+
+    public void cancel(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
 }

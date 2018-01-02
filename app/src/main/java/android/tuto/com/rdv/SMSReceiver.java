@@ -9,9 +9,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.telephony.SmsMessage;
+import android.telephony.TelephonyManager;
 import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.Toast;
+
+import java.util.Date;
 
 public class SMSReceiver extends BroadcastReceiver {
 
@@ -39,10 +42,9 @@ public class SMSReceiver extends BroadcastReceiver {
 
                 // TODO : Show message directly in the map - popup
                 // TODO : Prevent message from appearing in SMS ?
-                // TODO : Get contact from phone number if contact ?
 
                 if (isResponseToMeeting(messages[0].getMessageBody())) {
-                    startResponseToMeetingDialog(senderPhoneNo, messages[0].getMessageBody());
+                    startResponseToMeetingDialog(context, senderPhoneNo,  messages[0].getMessageBody());
                 } else {
                     startIncomingMeetingDialog(context, senderPhoneNo, messages[0].getMessageBody());
                 }
@@ -70,16 +72,23 @@ public class SMSReceiver extends BroadcastReceiver {
         return message.contains("Response:");
     }
 
-    private void startResponseToMeetingDialog(String phoneNumber, String message) {
-        NotificationsActivity instance = NotificationsActivity.instance();
-        // Pas grave si ça plante car on va changer et mettre dans la base de données
+    private void startResponseToMeetingDialog(Context context, String phoneNumber, String message) {
+
+        DatabaseHandler db = new DatabaseHandler(context);
+        User userSender = db.getUserByPhoneNumber(phoneNumber);
+        TelephonyManager tMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        String mPhoneNumber = tMgr.getLine1Number();
+        User userReceiver = db.getUserByPhoneNumber(mPhoneNumber);
+
         if (message.contains("Accepted")) {
-            // Todo : replace phone number by name of person (with database)
-            instance.updateList(phoneNumber + " accepted your invitation");
+            db.addNotification(new Notification(userSender.getName() + " accepted your invitation", userSender.getId(), userReceiver.getId(), (new Date()).toString()));
         } else {
-            // Todo : replace phone number by name of person (with database)
-            instance.updateList(phoneNumber + " declinde your invitation");
+            db.addNotification(new Notification(userSender.getName() + " declined your invitation", userSender.getId(), userReceiver.getId(), (new Date()).toString()));
         }
+
+        Intent intent = new Intent(context, MainActivity.class);;
+        context.startActivity(intent);
+
     }
 
 }
