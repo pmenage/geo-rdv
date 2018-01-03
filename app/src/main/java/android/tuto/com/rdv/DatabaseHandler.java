@@ -107,8 +107,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             cursor.moveToFirst();
         }
 
-        User user = new User(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2));
-        return user;
+        return new User(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2));
 
     }
 
@@ -121,8 +120,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         if (cursor != null) {
             cursor.moveToFirst();
-            User user = new User(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2));
-            return user;
+            return new User(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2));
         }
 
         return null;
@@ -208,13 +206,12 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             cursor.moveToFirst();
         }
 
-        Notification notification = new Notification(
+        return new Notification(
                 Integer.parseInt(cursor.getString(0)),
                 cursor.getString(1),
                 Integer.parseInt(cursor.getString(2)),
                 Integer.parseInt(cursor.getString(3)),
                 cursor.getString(4));
-        return notification;
 
     }
 
@@ -274,7 +271,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             cursor.moveToFirst();
         }
 
-        Meeting meeting = new Meeting(
+        return new Meeting(
                 Integer.parseInt(cursor.getString(0)),
                 cursor.getString(1),
                 cursor.getString(2),
@@ -282,7 +279,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 Integer.parseInt(cursor.getString(4)),
                 cursor.getString(5),
                 cursor.getString(6));
-        return meeting;
 
     }
 
@@ -297,7 +293,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             cursor.moveToFirst();
         }
 
-        Meeting meeting = new Meeting(
+        return new Meeting(
                 Integer.parseInt(cursor.getString(0)),
                 cursor.getString(1),
                 cursor.getString(2),
@@ -305,7 +301,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 Integer.parseInt(cursor.getString(4)),
                 cursor.getString(5),
                 cursor.getString(6));
-        return meeting;
 
     }
 

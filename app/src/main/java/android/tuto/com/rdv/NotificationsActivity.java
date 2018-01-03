@@ -14,14 +14,9 @@ import java.util.List;
 
 public class NotificationsActivity extends AppCompatActivity {
 
-    private static NotificationsActivity activity;
     private ArrayList<String> notificationList = new ArrayList<String>();
     private ArrayAdapter<String> adapter;
     private ListView listView;
-
-    public static NotificationsActivity instance() {
-        return activity;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

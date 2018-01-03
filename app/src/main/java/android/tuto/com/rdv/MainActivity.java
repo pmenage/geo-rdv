@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
             }, SEND_SMS_PERMISSION_REQUEST_CODE);
         }
 
+        // TODO : Add user automatically
+
         DatabaseHandler db = new DatabaseHandler(this);
         db.addUser(new User("Pauline", "15555215554"));
         db.addUser(new User("Khadija", "15555215556"));
@@ -113,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, MyListActivity.class);
         startActivity(intent);
+
     }
 
     public void seeMeetings(View view) {

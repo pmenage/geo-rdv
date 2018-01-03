@@ -1,6 +1,7 @@
 package android.tuto.com.rdv;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,23 +25,24 @@ public class SMSReceivedActivity extends AppCompatActivity {
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // Send Text message to sender
                         SmsManager smsManager = SmsManager.getDefault();
                         smsManager.sendTextMessage(phoneNumber, null, "Response: Accepted", null, null);
-                        // Put boolean in database to say that it is a response to a message
+                        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                        startActivity(intent);
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // Send Text message to sender
                         SmsManager smsManager = SmsManager.getDefault();
                         smsManager.sendTextMessage(phoneNumber, null, "Response: Declined", null, null);
-                        // Put boolean in database to say that it is a response
+                        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                        startActivity(intent);
                     }
                 });
         AlertDialog alert = builder.create();
         alert.show();
+
     }
 
 }

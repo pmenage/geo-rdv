@@ -40,26 +40,6 @@ public class MeetingsActivity extends AppCompatActivity {
         ListView listView = (ListView) findViewById(R.id.meetingsList);
         listView.setAdapter(adapter);
 
-        //listView = (ListView) findViewById(R.id.meetingsList);
-        //adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, meetingList);
-        //listView.setAdapter(adapter);
-
-/*
-        DatabaseHandler db = new DatabaseHandler(this);
-
-        TelephonyManager tMgr = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-        String mPhoneNumber = tMgr.getLine1Number();
-
-        List<Meeting> meetings = db.getAllMeetingsByPhoneNumber(mPhoneNumber);
-
-        if (meetings != null) {
-            for (Meeting meeting : meetings) {
-                adapter.insert(meeting.getTimestamp() + ": " + meeting.getMessage(), 0);
-            }
-            adapter.notifyDataSetChanged();
-        }
-*/
-
     }
 
     public void cancel(View view) {

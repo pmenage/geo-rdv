@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
 import android.widget.PopupMenu;
@@ -37,12 +38,9 @@ public class SMSReceiver extends BroadcastReceiver {
                 } else {
                     messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
                 }
-                // TODO : enlever la vérification de version d'API et voir si ça marche quand même
-                // (surtout que la fonction createFromPdu est deprecated s'il manque un argument
                 String senderPhoneNo = messages[i].getDisplayOriginatingAddress();
                 Toast.makeText(context, "Message: " + messages[0].getMessageBody() + ", from " + senderPhoneNo, Toast.LENGTH_LONG).show();
 
-                // TODO : Show message directly in the map - popup
                 // TODO : Prevent message from appearing in SMS ?
 
                 if (isResponseToMeeting(messages[0].getMessageBody())) {
@@ -96,8 +94,8 @@ public class SMSReceiver extends BroadcastReceiver {
         DatabaseHandler db = new DatabaseHandler(context);
         User userSender = db.getUserByPhoneNumber(phoneNumber);
         TelephonyManager tMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        String mPhoneNumber = tMgr.getLine1Number();
-        User userReceiver = db.getUserByPhoneNumber(mPhoneNumber);
+        String myPhoneNumber = tMgr.getLine1Number();
+        User userReceiver = db.getUserByPhoneNumber(myPhoneNumber);
 
         if (message.contains("Accepted")) {
             db.addNotification(new Notification(userSender.getName() + " accepted your invitation", userSender.getId(), userReceiver.getId(), (new Date()).toString()));
