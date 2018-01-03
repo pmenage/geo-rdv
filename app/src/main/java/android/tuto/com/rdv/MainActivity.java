@@ -115,16 +115,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    // TODO : delete this function and the button
-    public void seeMap(View view) {
-
-        Intent intent = new Intent(this, GoogleMapActivity.class);
-        intent.putExtra("latitude", 70.32);
-        intent.putExtra("longitude", 43.76);
-        startActivity(intent);
-
-    }
-
     public void seeMeetings(View view) {
 
         Intent intent = new Intent(this, MeetingsActivity.class);

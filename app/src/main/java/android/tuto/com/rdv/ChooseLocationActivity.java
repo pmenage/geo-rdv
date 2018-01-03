@@ -1,14 +1,11 @@
 package android.tuto.com.rdv;
 
-import android.Manifest;
 import android.content.Intent;
 import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -44,7 +41,6 @@ public class ChooseLocationActivity extends AppCompatActivity {
                         }
                     });
         } catch (SecurityException e) {
-            // Todo : maybe just call check permission and send toast with access denied if problem
             e.printStackTrace();
         }
 

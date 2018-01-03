@@ -263,7 +263,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     }
 
-    public Meeting getMeetingByReceiverID(int id)  {
+    public Meeting getMeetingByReceiverID(int id) {
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_MEETINGS, new String[] {
@@ -286,13 +286,37 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     }
 
+    public Meeting getMeetingByMessage(String message) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_MEETINGS, new String[] {
+                        KEY_ID_MEETINGS, KEY_LATITUDE, KEY_LONGITUDE, KEY_SENDER_MEETINGS, KEY_RECEIVER_MEETINGS, KEY_MESSAGE_MEETINGS, KEY_TIMESTAMP_MEETINGS
+                }, KEY_MESSAGE_MEETINGS + "=?",
+                new String[] { message }, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+
+        Meeting meeting = new Meeting(
+                Integer.parseInt(cursor.getString(0)),
+                cursor.getString(1),
+                cursor.getString(2),
+                Integer.parseInt(cursor.getString(3)),
+                Integer.parseInt(cursor.getString(4)),
+                cursor.getString(5),
+                cursor.getString(6));
+        return meeting;
+
+    }
+
     public List<Meeting> getAllMeetingsByPhoneNumber(String phoneNumber) {
 
         List<Meeting> meetingList = new ArrayList<>();
 
         User user = getUserByPhoneNumber(phoneNumber);
 
-        String selectQuery = "SELECT * FROM " + TABLE_MEETINGS + " WHERE " + KEY_RECEIVER_MEETINGS + " = " + user.getId();
+        String selectQuery = "SELECT * FROM " + TABLE_MEETINGS + " WHERE " + KEY_RECEIVER_MEETINGS + " = " + user.getId()
+                + " OR " + KEY_SENDER_MEETINGS + " = " + user.getId();
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 

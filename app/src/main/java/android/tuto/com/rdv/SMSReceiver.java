@@ -15,6 +15,8 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SMSReceiver extends BroadcastReceiver {
 
@@ -53,19 +55,36 @@ public class SMSReceiver extends BroadcastReceiver {
         }
     }
 
-    private boolean isIncomingMeeting() {
-        // TODO : find a way to filter messages
-        // IDEA : pour chaque demande de rdv, mettre dans la base un booléen disant si c'est la réception
-        // d'une réponse ou pas
-        return true;
-    }
-
     private void startIncomingMeetingDialog(Context context, String phoneNumber, String message) {
+
+        DatabaseHandler db = new DatabaseHandler(context);
+        User userSender = db.getUserByPhoneNumber(phoneNumber);
+        TelephonyManager tMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        String myPhoneNumber = tMgr.getLine1Number();
+        User userReceiver = db.getUserByPhoneNumber(myPhoneNumber);
+
+        Pattern pattern = Pattern.compile("Latitude:(.*)Longitude:");
+        Matcher matcher = pattern.matcher(message);
+        String latitude = "0";
+        if (matcher.find()) {
+            latitude = matcher.group(1);
+        }
+
+        Pattern pattern2 = Pattern.compile("Longitude:(.*)");
+        Matcher matcher2 = pattern2.matcher(message);
+        String longitude = "0";
+        if (matcher2.find()) {
+            longitude = matcher2.group(1);
+        }
+
+        db.addMeeting(new Meeting(latitude, longitude, userSender.getId(), userReceiver.getId(), message, (new Date()).toString()));
+
         Intent intent = new Intent(context, SMSReceivedActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("phoneNumber", phoneNumber);
         intent.putExtra("message", message);
         context.startActivity(intent);
+
     }
 
     private boolean isResponseToMeeting(String message) {
