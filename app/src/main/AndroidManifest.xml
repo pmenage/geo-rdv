@@ -15,7 +15,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
@@ -43,6 +43,9 @@
         <activity android:name=".GoogleMapActivity" />
         <activity android:name=".ChooseLocationActivity" />
         <activity android:name=".SendSMSActivity" />
+        <activity android:name=".SMSReceivedActivity" />
+        <activity android:name=".NotificationsActivity" />
+        <activity android:name=".MeetingsActivity"></activity>
 
         <receiver android:name=".SMSReceiver">
             <intent-filter>
@@ -50,8 +53,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".SMSReceivedActivity" />
-        <activity android:name=".NotificationsActivity"></activity>
     </application>
 
 </manifest>

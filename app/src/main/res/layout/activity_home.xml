@@ -52,6 +52,12 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="seeMeetings"
+        android:text="@string/seeMeetings" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:onClick="seeNotifications"
         android:text="@string/seeNotifications" />
 

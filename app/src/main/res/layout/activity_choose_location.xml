@@ -12,18 +12,18 @@
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Send your location or choose a location"/>
+        android:text="@string/choose"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send my location"
+        android:text="@string/send_my_location"
         android:onClick="sendUserLocation" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Latitude:"/>
+        android:text="@string/latitude"/>
 
     <EditText
         android:id="@+id/latitude"
@@ -34,7 +34,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Longitude:"/>
+        android:text="@string/longitude"/>
 
     <EditText
         android:id="@+id/longitude"
@@ -45,13 +45,13 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send another location"
+        android:text="@string/send_other_location"
         android:onClick="sendOtherLocation" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cancel"
+        android:text="@string/cancel"
         android:onClick="cancel" />
 
 </LinearLayout>

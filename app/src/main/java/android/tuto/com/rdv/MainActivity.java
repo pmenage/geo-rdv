@@ -20,8 +20,6 @@ import android.widget.EditText;
 public class MainActivity extends AppCompatActivity {
 
     final int SEND_SMS_PERMISSION_REQUEST_CODE = 111;
-    final int RECEIVE_SMS_PERMISSION_REQUEST_CODE = 222;
-    final int READ_PHONE_STATE_PERMISSION_REQUEST_CODE = 333;
     private Button smsButton;
 
     @Override
@@ -33,20 +31,20 @@ public class MainActivity extends AppCompatActivity {
         smsButton.setEnabled(false);
         if (checkPermission(Manifest.permission.SEND_SMS)) {
             smsButton.setEnabled(true);
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, SEND_SMS_PERMISSION_REQUEST_CODE);
         }
 
-        if (!checkPermission(Manifest.permission.RECEIVE_SMS)) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS}, RECEIVE_SMS_PERMISSION_REQUEST_CODE);
-        }
-
-        if (!checkPermission(Manifest.permission.READ_PHONE_STATE)) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, READ_PHONE_STATE_PERMISSION_REQUEST_CODE);
-        }
-
-        if (!isLocationEnabled()) {
-            showLocationNotEnabledAlert();
+        if (!checkPermission(Manifest.permission.RECEIVE_SMS)
+                || !checkPermission(Manifest.permission.SEND_SMS)
+                || !checkPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                || !checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+                || !checkPermission(Manifest.permission.READ_PHONE_STATE)) {
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.RECEIVE_SMS,
+                    Manifest.permission.SEND_SMS,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.READ_PHONE_STATE
+            }, SEND_SMS_PERMISSION_REQUEST_CODE);
         }
 
         DatabaseHandler db = new DatabaseHandler(this);
@@ -59,6 +57,10 @@ public class MainActivity extends AppCompatActivity {
         EditText phoneNumberView = (EditText) findViewById(R.id.num);
         String phoneNumber = phoneNumberView.getText().toString();
         phoneNumberView.setText("");
+
+        if (!isLocationEnabled()) {
+            showLocationNotEnabledAlert();
+        }
 
         Intent intent = new Intent(this, ChooseLocationActivity.class);
         intent.putExtra("phoneNumber", phoneNumber);
@@ -113,11 +115,19 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    // TODO : delete this function and the button
     public void seeMap(View view) {
 
         Intent intent = new Intent(this, GoogleMapActivity.class);
         intent.putExtra("latitude", 70.32);
         intent.putExtra("longitude", 43.76);
+        startActivity(intent);
+
+    }
+
+    public void seeMeetings(View view) {
+
+        Intent intent = new Intent(this, MeetingsActivity.class);
         startActivity(intent);
 
     }

@@ -2,7 +2,6 @@ package android.tuto.com.rdv;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -22,10 +21,19 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     private static final String TABLE_NOTIFICATIONS = "notifications";
     private static final String KEY_ID_NOTIF = "id";
-    private static final String KEY_MESSAGE = "message";
+    private static final String KEY_MESSAGE_NOTIF = "message";
     private static final String KEY_SENDER_NOTIF = "sender_id";
     private static final String KEY_RECEIVER_NOTIF = "receiver_id";
-    private static final String KEY_TIMESTAMP = "timestamp";
+    private static final String KEY_TIMESTAMP_NOTIF = "timestamp";
+
+    private static final String TABLE_MEETINGS = "meetings";
+    private static final String KEY_ID_MEETINGS = "id";
+    private static final String KEY_LATITUDE = "latitude";
+    private static final String KEY_LONGITUDE = "longitude";
+    private static final String KEY_SENDER_MEETINGS = "sender_id";
+    private static final String KEY_RECEIVER_MEETINGS = "receiver_id";
+    private static final String KEY_MESSAGE_MEETINGS = "message";
+    private static final String KEY_TIMESTAMP_MEETINGS = "timestamp";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -43,11 +51,21 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         String CREATE_NOTIFICATIONS_TABLE = "CREATE TABLE " + TABLE_NOTIFICATIONS + "("
                 + KEY_ID_NOTIF + " INTEGER PRIMARY KEY,"
-                + KEY_MESSAGE + " TEXT,"
+                + KEY_MESSAGE_NOTIF + " TEXT,"
                 + KEY_SENDER_NOTIF + " INTEGER,"
                 + KEY_RECEIVER_NOTIF + " INTEGER,"
-                + KEY_TIMESTAMP + " TEXT" + ")";
+                + KEY_TIMESTAMP_NOTIF + " TEXT" + ")";
         db.execSQL(CREATE_NOTIFICATIONS_TABLE);
+
+        String CREATE_MEETINGS_TABLE = "CREATE TABLE " + TABLE_MEETINGS + "("
+                + KEY_ID_MEETINGS + " INTEGER PRIMARY KEY,"
+                + KEY_LATITUDE + " TEXT,"
+                + KEY_LONGITUDE + " TEXT,"
+                + KEY_SENDER_MEETINGS + " INTEGER,"
+                + KEY_RECEIVER_MEETINGS + " INTEGER,"
+                + KEY_MESSAGE_MEETINGS + " TEXT,"
+                + KEY_TIMESTAMP_MEETINGS + " TEXT" + ")";
+        db.execSQL(CREATE_MEETINGS_TABLE);
 
     }
 
@@ -57,6 +75,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NOTIFICATIONS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MEETINGS);
         onCreate(db);
 
     }
@@ -163,17 +182,15 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     /* NOTIFICATIONS */
 
-    // All CRUD operations : Create, Read, Update, Delete
-
     public void addNotification(Notification notification) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_MESSAGE, notification.getMessage());
+        values.put(KEY_MESSAGE_NOTIF, notification.getMessage());
         values.put(KEY_SENDER_NOTIF, notification.getSenderID());
         values.put(KEY_RECEIVER_NOTIF, notification.getReceiverID());
-        values.put(KEY_TIMESTAMP, notification.getTimestamp());
+        values.put(KEY_TIMESTAMP_NOTIF, notification.getTimestamp());
 
         db.insert(TABLE_NOTIFICATIONS, null, values);
         db.close();
@@ -184,7 +201,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NOTIFICATIONS, new String[] {
-                KEY_ID_NOTIF, KEY_MESSAGE, KEY_SENDER_NOTIF, KEY_RECEIVER_NOTIF, KEY_TIMESTAMP
+                KEY_ID_NOTIF, KEY_MESSAGE_NOTIF, KEY_SENDER_NOTIF, KEY_RECEIVER_NOTIF, KEY_TIMESTAMP_NOTIF
         }, KEY_RECEIVER_NOTIF + "=?",
                 new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null) {
@@ -224,6 +241,76 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         }
 
         return notificationList;
+
+    }
+
+    /* MEETINGS */
+
+    public void addMeeting(Meeting meeting) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_LATITUDE, meeting.getLatitude());
+        values.put(KEY_LONGITUDE, meeting.getLongitude());
+        values.put(KEY_SENDER_MEETINGS, meeting.getSenderID());
+        values.put(KEY_RECEIVER_MEETINGS, meeting.getReceiverID());
+        values.put(KEY_MESSAGE_MEETINGS, meeting.getMessage());
+        values.put(KEY_TIMESTAMP_MEETINGS, meeting.getTimestamp());
+
+        db.insert(TABLE_MEETINGS, null, values);
+        db.close();
+
+    }
+
+    public Meeting getMeetingByReceiverID(int id)  {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_MEETINGS, new String[] {
+                        KEY_ID_MEETINGS, KEY_LATITUDE, KEY_LONGITUDE, KEY_SENDER_MEETINGS, KEY_RECEIVER_MEETINGS, KEY_MESSAGE_MEETINGS, KEY_TIMESTAMP_MEETINGS
+                }, KEY_RECEIVER_MEETINGS + "=?",
+                new String[] { String.valueOf(id) }, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+
+        Meeting meeting = new Meeting(
+                Integer.parseInt(cursor.getString(0)),
+                cursor.getString(1),
+                cursor.getString(2),
+                Integer.parseInt(cursor.getString(3)),
+                Integer.parseInt(cursor.getString(4)),
+                cursor.getString(5),
+                cursor.getString(6));
+        return meeting;
+
+    }
+
+    public List<Meeting> getAllMeetingsByPhoneNumber(String phoneNumber) {
+
+        List<Meeting> meetingList = new ArrayList<>();
+
+        User user = getUserByPhoneNumber(phoneNumber);
+
+        String selectQuery = "SELECT * FROM " + TABLE_MEETINGS + " WHERE " + KEY_RECEIVER_MEETINGS + " = " + user.getId();
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Meeting meeting = new Meeting();
+                meeting.setId(Integer.parseInt(cursor.getString(0)));
+                meeting.setLatitude(cursor.getString(1));
+                meeting.setLongitude(cursor.getString(2));
+                meeting.setSenderID(Integer.parseInt(cursor.getString(3)));
+                meeting.setReceiverID(Integer.parseInt(cursor.getString(4)));
+                meeting.setMessage(cursor.getString(5));
+                meeting.setTimestamp(cursor.getString(6));
+                meetingList.add(meeting);
+            } while (cursor.moveToNext());
+        }
+
+        return meetingList;
 
     }
 

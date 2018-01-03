@@ -9,4 +9,14 @@
     <string name="title_activity_choose_location">ChooseLocationActivity</string>
     <string name="seeNotifications">See notifications</string>
     <string name="notifications">Notifications</string>
+    <string name="meetings">Meetings</string>
+    <string name="cancel">Cancel</string>
+    <string name="choose">Send your location or choose a location</string>
+    <string name="send_my_location">Send my location</string>
+    <string name="latitude">Latitude:</string>
+    <string name="longitude">Longitude:</string>
+    <string name="send_other_location">Send another location</string>
+    <string name="change_message">You can change this message</string>
+    <string name="send_message">Send message</string>
+    <string name="seeMeetings">See meetings</string>
 </resources>

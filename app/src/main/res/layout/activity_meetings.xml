@@ -5,16 +5,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context="android.tuto.com.rdv.NotificationsActivity">
+    tools:context="android.tuto.com.rdv.MeetingsActivity">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/notifications" />
+        android:text="@string/meetings" />
 
     <ListView
-        android:id="@+id/notificationsList"
+        android:id="@+id/meetingsList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></ListView>
 
