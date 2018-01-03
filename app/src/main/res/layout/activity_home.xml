@@ -31,7 +31,7 @@
 
     <Button
         android:id="@+id/invite"
-        android:layout_width="wrap_content"
+        android:layout_width="224dp"
         android:layout_height="wrap_content"
         android:text="@string/invite"
         android:onClick="sendSMS"
@@ -44,19 +44,13 @@
         android:text="@string/contacts" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="seeMap"
-        android:text="@string/seeMap" />
-
-    <Button
-        android:layout_width="wrap_content"
+        android:layout_width="224dp"
         android:layout_height="wrap_content"
         android:onClick="seeMeetings"
         android:text="@string/seeMeetings" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="224dp"
         android:layout_height="wrap_content"
         android:onClick="seeNotifications"
         android:text="@string/seeNotifications" />

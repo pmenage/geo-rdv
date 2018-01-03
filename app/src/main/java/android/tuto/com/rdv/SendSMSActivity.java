@@ -41,16 +41,11 @@ public class SendSMSActivity extends AppCompatActivity {
         String message = messageView.getText().toString();
 
         SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(phoneNumber, null, message + "Latitude:" + latitude + "Longitude:" + longitude, null, null);
+        String viewMessage = message + "Latitude:" + latitude + "Longitude:" + longitude;
+        smsManager.sendTextMessage(phoneNumber, null, viewMessage, null, null);
 
         DatabaseHandler db = new DatabaseHandler(this);
-        // TODO : check if is emulator or not
-        User userReceiver = db.getUserByPhoneNumber("1555521" + phoneNumber);
-        TelephonyManager tMgr = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-        String myPhoneNumber = tMgr.getLine1Number();
-        User userSender = db.getUserByPhoneNumber(myPhoneNumber);
-
-        db.addMeeting(new Meeting(Double.toString(latitude), Double.toString(longitude), userSender.getId(), userReceiver.getId(), message, (new Date()).toString()));
+        db.addMeeting(new Meeting(Double.toString(latitude), Double.toString(longitude), viewMessage, (new Date()).toString()));
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

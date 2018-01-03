@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MeetingsActivity extends AppCompatActivity {
 
@@ -24,11 +26,7 @@ public class MeetingsActivity extends AppCompatActivity {
 
         ArrayList<String> list = new ArrayList<String>();
         DatabaseHandler db = new DatabaseHandler(this);
-
-        TelephonyManager tMgr = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-        String mPhoneNumber = tMgr.getLine1Number();
-
-        List<Meeting> meetings = db.getAllMeetingsByPhoneNumber(mPhoneNumber);
+        List<Meeting> meetings = db.getAllMeetings();
 
         if (meetings != null) {
             for (Meeting meeting : meetings) {
