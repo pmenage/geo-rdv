@@ -22,16 +22,12 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     private static final String TABLE_NOTIFICATIONS = "notifications";
     private static final String KEY_ID_NOTIF = "id";
     private static final String KEY_MESSAGE_NOTIF = "message";
-    private static final String KEY_SENDER_NOTIF = "sender_id";
-    private static final String KEY_RECEIVER_NOTIF = "receiver_id";
     private static final String KEY_TIMESTAMP_NOTIF = "timestamp";
 
     private static final String TABLE_MEETINGS = "meetings";
     private static final String KEY_ID_MEETINGS = "id";
     private static final String KEY_LATITUDE = "latitude";
     private static final String KEY_LONGITUDE = "longitude";
-    private static final String KEY_SENDER_MEETINGS = "sender_id";
-    private static final String KEY_RECEIVER_MEETINGS = "receiver_id";
     private static final String KEY_MESSAGE_MEETINGS = "message";
     private static final String KEY_TIMESTAMP_MEETINGS = "timestamp";
 
@@ -52,8 +48,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         String CREATE_NOTIFICATIONS_TABLE = "CREATE TABLE " + TABLE_NOTIFICATIONS + "("
                 + KEY_ID_NOTIF + " INTEGER PRIMARY KEY,"
                 + KEY_MESSAGE_NOTIF + " TEXT,"
-                + KEY_SENDER_NOTIF + " INTEGER,"
-                + KEY_RECEIVER_NOTIF + " INTEGER,"
                 + KEY_TIMESTAMP_NOTIF + " TEXT" + ")";
         db.execSQL(CREATE_NOTIFICATIONS_TABLE);
 
@@ -61,8 +55,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 + KEY_ID_MEETINGS + " INTEGER PRIMARY KEY,"
                 + KEY_LATITUDE + " TEXT,"
                 + KEY_LONGITUDE + " TEXT,"
-                + KEY_SENDER_MEETINGS + " INTEGER,"
-                + KEY_RECEIVER_MEETINGS + " INTEGER,"
                 + KEY_MESSAGE_MEETINGS + " TEXT,"
                 + KEY_TIMESTAMP_MEETINGS + " TEXT" + ")";
         db.execSQL(CREATE_MEETINGS_TABLE);
@@ -186,8 +178,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         ContentValues values = new ContentValues();
         values.put(KEY_MESSAGE_NOTIF, notification.getMessage());
-        values.put(KEY_SENDER_NOTIF, notification.getSenderID());
-        values.put(KEY_RECEIVER_NOTIF, notification.getReceiverID());
         values.put(KEY_TIMESTAMP_NOTIF, notification.getTimestamp());
 
         db.insert(TABLE_NOTIFICATIONS, null, values);
@@ -199,8 +189,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NOTIFICATIONS, new String[] {
-                KEY_ID_NOTIF, KEY_MESSAGE_NOTIF, KEY_SENDER_NOTIF, KEY_RECEIVER_NOTIF, KEY_TIMESTAMP_NOTIF
-        }, KEY_RECEIVER_NOTIF + "=?",
+                KEY_ID_NOTIF, KEY_MESSAGE_NOTIF, KEY_TIMESTAMP_NOTIF
+        }, KEY_ID_NOTIF + "=?",
                 new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
@@ -209,19 +199,15 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         return new Notification(
                 Integer.parseInt(cursor.getString(0)),
                 cursor.getString(1),
-                Integer.parseInt(cursor.getString(2)),
-                Integer.parseInt(cursor.getString(3)),
-                cursor.getString(4));
+                cursor.getString(2));
 
     }
 
-    public List<Notification> getAllNotificationsByPhoneNumber(String phoneNumber) {
+    public List<Notification> getAllNotifications() {
 
         List<Notification> notificationList = new ArrayList<>();
 
-        User user = getUserByPhoneNumber(phoneNumber);
-
-        String selectQuery = "SELECT * FROM " + TABLE_NOTIFICATIONS + " WHERE " + KEY_RECEIVER_NOTIF + " = " + user.getId();
+        String selectQuery = "SELECT * FROM " + TABLE_NOTIFICATIONS;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -230,9 +216,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 Notification notification = new Notification();
                 notification.setId(Integer.parseInt(cursor.getString(0)));
                 notification.setMessage(cursor.getString(1));
-                notification.setSenderID(Integer.parseInt(cursor.getString(2)));
-                notification.setReceiverID(Integer.parseInt(cursor.getString(3)));
-                notification.setTimestamp(cursor.getString(4));
+                notification.setTimestamp(cursor.getString(2));
                 notificationList.add(notification);
             } while (cursor.moveToNext());
         }
@@ -250,8 +234,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         ContentValues values = new ContentValues();
         values.put(KEY_LATITUDE, meeting.getLatitude());
         values.put(KEY_LONGITUDE, meeting.getLongitude());
-        values.put(KEY_SENDER_MEETINGS, meeting.getSenderID());
-        values.put(KEY_RECEIVER_MEETINGS, meeting.getReceiverID());
         values.put(KEY_MESSAGE_MEETINGS, meeting.getMessage());
         values.put(KEY_TIMESTAMP_MEETINGS, meeting.getTimestamp());
 
@@ -264,8 +246,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_MEETINGS, new String[] {
-                        KEY_ID_MEETINGS, KEY_LATITUDE, KEY_LONGITUDE, KEY_SENDER_MEETINGS, KEY_RECEIVER_MEETINGS, KEY_MESSAGE_MEETINGS, KEY_TIMESTAMP_MEETINGS
-                }, KEY_RECEIVER_MEETINGS + "=?",
+                        KEY_ID_MEETINGS, KEY_LATITUDE, KEY_LONGITUDE, KEY_MESSAGE_MEETINGS, KEY_TIMESTAMP_MEETINGS
+                }, KEY_ID_MEETINGS + "=?",
                 new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
@@ -275,10 +257,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 Integer.parseInt(cursor.getString(0)),
                 cursor.getString(1),
                 cursor.getString(2),
-                Integer.parseInt(cursor.getString(3)),
-                Integer.parseInt(cursor.getString(4)),
-                cursor.getString(5),
-                cursor.getString(6));
+                cursor.getString(3),
+                cursor.getString(4));
 
     }
 
@@ -286,7 +266,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_MEETINGS, new String[] {
-                        KEY_ID_MEETINGS, KEY_LATITUDE, KEY_LONGITUDE, KEY_SENDER_MEETINGS, KEY_RECEIVER_MEETINGS, KEY_MESSAGE_MEETINGS, KEY_TIMESTAMP_MEETINGS
+                        KEY_ID_MEETINGS, KEY_LATITUDE, KEY_LONGITUDE, KEY_MESSAGE_MEETINGS, KEY_TIMESTAMP_MEETINGS
                 }, KEY_MESSAGE_MEETINGS + "=?",
                 new String[] { message }, null, null, null, null);
         if (cursor != null) {
@@ -297,21 +277,16 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 Integer.parseInt(cursor.getString(0)),
                 cursor.getString(1),
                 cursor.getString(2),
-                Integer.parseInt(cursor.getString(3)),
-                Integer.parseInt(cursor.getString(4)),
-                cursor.getString(5),
-                cursor.getString(6));
+                cursor.getString(3),
+                cursor.getString(4));
 
     }
 
-    public List<Meeting> getAllMeetingsByPhoneNumber(String phoneNumber) {
+    public List<Meeting> getAllMeetings() {
 
         List<Meeting> meetingList = new ArrayList<>();
 
-        User user = getUserByPhoneNumber(phoneNumber);
-
-        String selectQuery = "SELECT * FROM " + TABLE_MEETINGS + " WHERE " + KEY_RECEIVER_MEETINGS + " = " + user.getId()
-                + " OR " + KEY_SENDER_MEETINGS + " = " + user.getId();
+        String selectQuery = "SELECT * FROM " + TABLE_MEETINGS;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -321,10 +296,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 meeting.setId(Integer.parseInt(cursor.getString(0)));
                 meeting.setLatitude(cursor.getString(1));
                 meeting.setLongitude(cursor.getString(2));
-                meeting.setSenderID(Integer.parseInt(cursor.getString(3)));
-                meeting.setReceiverID(Integer.parseInt(cursor.getString(4)));
-                meeting.setMessage(cursor.getString(5));
-                meeting.setTimestamp(cursor.getString(6));
+                meeting.setMessage(cursor.getString(3));
+                meeting.setTimestamp(cursor.getString(4));
                 meetingList.add(meeting);
             } while (cursor.moveToNext());
         }

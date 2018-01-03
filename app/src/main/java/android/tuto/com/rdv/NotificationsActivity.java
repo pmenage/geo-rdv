@@ -28,11 +28,7 @@ public class NotificationsActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
 
         DatabaseHandler db = new DatabaseHandler(this);
-
-        TelephonyManager tMgr = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-        String mPhoneNumber = tMgr.getLine1Number();
-
-        List<Notification> notifications = db.getAllNotificationsByPhoneNumber(mPhoneNumber);
+        List<Notification> notifications = db.getAllNotifications();
 
         if (notifications != null) {
             for (Notification notification : notifications) {

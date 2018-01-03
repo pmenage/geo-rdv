@@ -56,10 +56,6 @@ public class SMSReceiver extends BroadcastReceiver {
     private void startIncomingMeetingDialog(Context context, String phoneNumber, String message) {
 
         DatabaseHandler db = new DatabaseHandler(context);
-        User userSender = db.getUserByPhoneNumber(phoneNumber);
-        TelephonyManager tMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        String myPhoneNumber = tMgr.getLine1Number();
-        User userReceiver = db.getUserByPhoneNumber(myPhoneNumber);
 
         Pattern pattern = Pattern.compile("Latitude:(.*)Longitude:");
         Matcher matcher = pattern.matcher(message);
@@ -75,7 +71,7 @@ public class SMSReceiver extends BroadcastReceiver {
             longitude = matcher2.group(1);
         }
 
-        db.addMeeting(new Meeting(latitude, longitude, userSender.getId(), userReceiver.getId(), message, (new Date()).toString()));
+        db.addMeeting(new Meeting(latitude, longitude, message, (new Date()).toString()));
 
         Intent intent = new Intent(context, SMSReceivedActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -93,14 +89,11 @@ public class SMSReceiver extends BroadcastReceiver {
 
         DatabaseHandler db = new DatabaseHandler(context);
         User userSender = db.getUserByPhoneNumber(phoneNumber);
-        TelephonyManager tMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        String myPhoneNumber = tMgr.getLine1Number();
-        User userReceiver = db.getUserByPhoneNumber(myPhoneNumber);
 
         if (message.contains("Accepted")) {
-            db.addNotification(new Notification(userSender.getName() + " accepted your invitation", userSender.getId(), userReceiver.getId(), (new Date()).toString()));
+            db.addNotification(new Notification(userSender.getName() + " accepted your invitation", (new Date()).toString()));
         } else {
-            db.addNotification(new Notification(userSender.getName() + " declined your invitation", userSender.getId(), userReceiver.getId(), (new Date()).toString()));
+            db.addNotification(new Notification(userSender.getName() + " declined your invitation", (new Date()).toString()));
         }
 
         Intent intent = new Intent(context, MainActivity.class);;

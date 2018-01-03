@@ -14,21 +14,17 @@ public class Meeting {
 
     }
 
-    public Meeting(String latitude, String longitude, int senderID, int receiverID, String message, String timestamp) {
+    public Meeting(String latitude, String longitude, String message, String timestamp) {
         this.latitude = latitude;
         this.longitude = longitude;
-        this.senderID = senderID;
-        this.receiverID = receiverID;
         this.message = message;
         this.timestamp = timestamp;
     }
 
-    public Meeting(int id, String latitude, String longitude, int senderID, int receiverID, String message, String timestamp) {
+    public Meeting(int id, String latitude, String longitude, String message, String timestamp) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.senderID = senderID;
-        this.receiverID = receiverID;
         this.message = message;
         this.timestamp = timestamp;
     }
@@ -55,22 +51,6 @@ public class Meeting {
 
     public void setLongitude(String longitude) {
         this.longitude = longitude;
-    }
-
-    public int getSenderID() {
-        return senderID;
-    }
-
-    public void setSenderID(int senderID) {
-        this.senderID = senderID;
-    }
-
-    public int getReceiverID() {
-        return receiverID;
-    }
-
-    public void setReceiverID(int receiverID) {
-        this.receiverID = receiverID;
     }
 
     public String getMessage() {

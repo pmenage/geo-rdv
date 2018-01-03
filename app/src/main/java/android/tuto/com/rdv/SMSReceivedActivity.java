@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class SMSReceivedActivity extends AppCompatActivity {
 
     @Override
@@ -16,11 +19,17 @@ public class SMSReceivedActivity extends AppCompatActivity {
         Bundle extra = getIntent().getExtras();
         final String phoneNumber = extra.getString("phoneNumber");
         String message = extra.getString("message");
+        Pattern pattern = Pattern.compile("(.*)Latitude:.*");
+        Matcher matcher = pattern.matcher(message);
+        String viewMessage = "No message was found";
+        if (matcher.find()) {
+            viewMessage = matcher.group(1);
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder
                 .setTitle("Message received from " + phoneNumber)
-                .setMessage("Message: " + message + ". Do you want to accept this meeting?")
+                .setMessage("Message: " + viewMessage + ". Do you want to accept this meeting?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override

@@ -11,6 +11,8 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MeetingAdapter extends BaseAdapter implements ListAdapter {
 
@@ -46,14 +48,20 @@ public class MeetingAdapter extends BaseAdapter implements ListAdapter {
             view = inflater.inflate(R.layout.meeting_item, null);
         }
 
-        TextView textView = (TextView) view.findViewById(R.id.list_item_string);
+        TextView textView = view.findViewById(R.id.list_item_string);
         String message = list.get(position);
-        textView.setText(message);
+        Pattern pattern = Pattern.compile("(.*)Latitude:.*");
+        Matcher matcher = pattern.matcher(message);
+        String viewMessage = "No message was found";
+        if (matcher.find()) {
+            viewMessage = matcher.group(1);
+        }
+        textView.setText(viewMessage);
 
         DatabaseHandler db = new DatabaseHandler(context);
         final Meeting meeting = db.getMeetingByMessage(message);
 
-        Button button = (Button) view.findViewById(R.id.see_map_button);
+        Button button = view.findViewById(R.id.see_map_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
